@@ -31,7 +31,7 @@ LD_FLAGS += \
   -ljpeg \
   -lz -lm -ldl \
   -L$(CAFFE_LIB_PATH) -lcaffe -L$(HDF5_LIB_PATH) -lhdf5 -lglog \
-  -pthread
+  -pthread -lboost_system
 
 INCLUDE_FLAGS += \
   -I./src/main/cpp/ \

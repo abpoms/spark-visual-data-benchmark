@@ -14,7 +14,6 @@
 #include "caffe/proto/caffe.pb.h"
 #include "caffe/util/db.hpp"
 #include "caffe/util/io.hpp"
-#include "caffe/vision_layers.hpp"
 
 using caffe::Blob;
 using caffe::BlobProto;
@@ -31,12 +30,12 @@ shared_ptr<Net<float> > feature_extraction_net;
 
 void init_neural_net() {
   std::string model_path =
-    "features/hybridCNN/hybridCNN_deploy_upgraded.prototxt";
+    "/tmp/features/hybridCNN/hybridCNN_deploy_upgraded.prototxt";
   std::string model_weights_path =
-    "features/hybridCNN/hybridCNN_iter_700000_upgraded.caffemodel";
+    "/tmp/features/hybridCNN/hybridCNN_iter_700000_upgraded.caffemodel";
     //"features/places205VGG16/snapshot_iter_765280.caffemodel";
   std::string mean_proto_path =
-    "features/hybridCNN/hybridCNN_mean.binaryproto";
+    "/tmp/features/hybridCNN/hybridCNN_mean.binaryproto";
 
   // Initialize our network
   feature_extraction_net =
