@@ -30,12 +30,12 @@ shared_ptr<Net<float> > feature_extraction_net;
 
 void init_neural_net() {
   std::string model_path =
-    "/tmp/features/hybridCNN/hybridCNN_deploy_upgraded.prototxt";
+    "/opt/features/hybridCNN/hybridCNN_deploy_upgraded.prototxt";
   std::string model_weights_path =
-    "/tmp/features/hybridCNN/hybridCNN_iter_700000_upgraded.caffemodel";
+    "/opt/features/hybridCNN/hybridCNN_iter_700000_upgraded.caffemodel";
     //"features/places205VGG16/snapshot_iter_765280.caffemodel";
   std::string mean_proto_path =
-    "/tmp/features/hybridCNN/hybridCNN_mean.binaryproto";
+    "/opt/features/hybridCNN/hybridCNN_mean.binaryproto";
 
   // Initialize our network
   feature_extraction_net =
