@@ -1,21 +1,23 @@
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
+import org.apache.spark.scheduler._
 import javax.xml.bind.DatatypeConverter
+import scala.collection.mutable.MutableList
 
 object Benchmark {
   def main(args: Array[String]) {
-    var pipeTimes = List()
+    val pipeTimes = Mutable()
     val conf = new SparkConf().setAppName("Microbenchmark")
     val sc = new SparkContext(conf)
-      .addSparkListener(new SparkListener() {
-        override onTaskEnd(taskEnd: SparkListenerTaskEnd) {
+    sc.addSparkListener(new SparkListener() {
+        override def onTaskEnd(taskEnd: SparkListenerTaskEnd): Unit = {
           println("stageId %d, time %d".format(taskEnd.stageId, taskEnd.taskInfo.duration))
           if (taskEnd.stageId == 1) {
-            pipeTimes :+ taskEnd.taskInfo.duration
+            pipeTimes += taskEnd.taskInfo.duration
           }
         }
-      })
+      });
 
     val images_with_paths =
       sc.binaryFiles("gs://vdb-imagenet/kcam/frames/*")
@@ -42,6 +44,6 @@ object Benchmark {
 
     println("RDD output (%f ms): %d".format(t, output))
 
-    pipeTime.foreach { println }
+    pipeTimes.foreach { println }
   }
 }
