@@ -5,12 +5,21 @@ import javax.xml.bind.DatatypeConverter
 
 object Benchmark {
   def main(args: Array[String]) {
+    var pipeTimes = List()
     val conf = new SparkConf().setAppName("Microbenchmark")
     val sc = new SparkContext(conf)
+      .addSparkListener(new SparkListener() {
+        override onTaskEnd(taskEnd: SparkListenerTaskEnd) {
+          println("stageId %d, time %d".format(taskEnd.stageId, taskEnd.taskInfo.duration))
+          if (taskEnd.stageId == 1) {
+            pipeTimes :+ taskEnd.taskInfo.duration
+          }
+        }
+      })
 
     val images_with_paths =
       sc.binaryFiles("gs://vdb-imagenet/kcam/frames/*")
-    val images = images_with_paths.map(x => x._2).repartition(16)
+    val images = images_with_paths.map(x => x._2).repartition(64)
     val b64images = images.map(x =>
       DatatypeConverter.printBase64Binary(x.toArray()))
 
@@ -32,5 +41,7 @@ object Benchmark {
     val t = (end - start) / (1 * 1000000.0);
 
     println("RDD output (%f ms): %d".format(t, output))
+
+    pipeTime.foreach { println }
   }
 }
